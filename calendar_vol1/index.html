@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Calendar</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Space Mono', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      /*background-color: #f8f4ec; Background warna krem */
+      color: #5a4b3a; /* Warna teks coklat pastel */
+    }
+
+    .calendar {
+      width: 300px;
+      background: #F2F2DB; /* Warna coklat pastel untuk background kalender */
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(90, 75, 58, 0.3);
+      overflow: hidden;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: #A2AD83; /* Warna coklat pastel lebih gelap */
+    }
+
+    .calendar-header button {
+      background: #F2F2DB; /* Warna tombol coklat pastel */
+      color: #A2AD83;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .calendar-header button:hover {
+      background: #F2F2DB; /* Warna hover untuk tombol */
+    }
+
+    .calendar-body {
+      padding: 15px;
+    }
+
+    .calendar-weekdays, .calendar-dates {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+    }
+
+    .calendar-weekdays div {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #A2AD83;
+    }
+
+    .calendar-dates div {
+      text-align: center;
+      padding: 5px 0;
+      margin: 2px;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #A2AD83; /* Warna angka */
+    }
+
+    .calendar-dates div.today {
+      background: #A2AD83; /* Warna coklat pastel untuk tanggal hari ini */
+      color: #fff;
+    }
+
+    .calendar-dates div:hover {
+      background: #EFE3C0; /* Warna hover untuk tanggal */
+    }
+
+    .calendar-footer {
+      text-align: center;
+      padding: 10px;
+      background: #A2AD83; /* Warna footer */
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calendar">
+    <div class="calendar-header">
+      <button id="prev-month">&lt;</button>
+      <span id="month-year"></span>
+      <button id="next-month">&gt;</button>
+    </div>
+    <div class="calendar-body">
+      <div class="calendar-weekdays">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div class="calendar-dates" id="calendar-dates"></div>
+    </div>
+    <div class="calendar-footer">
+      <span id="today-date"></span>
+    </div>
+  </div>
+  <script>
+    const calendarDates = document.getElementById("calendar-dates");
+    const monthYear = document.getElementById("month-year");
+    const todayDate = document.getElementById("today-date");
+    const prevMonth = document.getElementById("prev-month");
+    const nextMonth = document.getElementById("next-month");
+
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    let date = new Date();
+
+    function renderCalendar() {
+      const year = date.getFullYear();
+      const month = date.getMonth();
+
+      monthYear.textContent = `${months[month]} - ${year}`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const lastDate = new Date(year, month + 1, 0).getDate();
+
+      calendarDates.innerHTML = "";
+
+      // Debugging untuk tanggal awal dan akhir
+      console.log(`Rendering calendar for ${months[month]} ${year}`);
+      console.log(`First day of the month is ${firstDay}, Last date is ${lastDate}`);
+
+      for (let i = 0; i < firstDay; i++) {
+        calendarDates.innerHTML += `<div></div>`;
+      }
+
+      for (let day = 1; day <= lastDate; day++) {
+        const isToday =
+          day === new Date().getDate() &&
+          month === new Date().getMonth() &&
+          year === new Date().getFullYear();
+
+        calendarDates.innerHTML += `
+          <div class="${isToday ? "today" : ""}">${day}</div>
+        `;
+      }
+
+      todayDate.textContent = `Today: ${date.toDateString()}`;
+    }
+
+    prevMonth.addEventListener("click", () => {
+      date.setMonth(date.getMonth() - 1);
+      renderCalendar();
+    });
+
+    nextMonth.addEventListener("click", () => {
+      date.setMonth(date.getMonth() + 1);
+      renderCalendar();
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>
