@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Progress Widget</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #1a1a2e, #16213e);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .widget {
+            background: linear-gradient(145deg, #1f4068, #1b1b2f);
+            border-radius: 15px;
+            padding: 25px;
+            width: 350px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .widget h1 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #00d9ff;
+        }
+
+        .progress-bar {
+            background: #0f3460;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+            height: 12px;
+            position: relative;
+        }
+
+        .progress-bar span {
+            display: block;
+            height: 100%;
+            background: linear-gradient(to right, #00d4ff, #0078ff);
+            border-radius: 10px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .quarters {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #00d9ff;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-style: italic;
+            font-size: 14px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <h1>Sarana AI<br>Today is <span id="current-date"></span></h1>
+
+        <div class="progress-label">
+            <span>Week <span id="week-number"></span></span>
+            <span><span id="week-progress"></span>%</span>
+        </div>
+        <div class="progress-bar">
+            <span id="week-bar" style="width: 0%;"></span>
+        </div>
+
+        <div class="progress-label">
+            <span>2025</span>
+            <span><span id="year-progress"></span>%</span>
+        </div>
+        <div class="progress-bar">
+            <span id="year-bar" style="width: 0%;"></span>
+        </div>
+
+        <div class="quarters">
+            <span>Q1</span>
+            <span>Q2</span>
+            <span>Q3</span>
+            <span>Q4</span>
+        </div>
+
+        <div class="footer">"Let's build"</div>
+    </div>
+
+    <script>
+        function updateProgress() {
+            const today = new Date();
+
+            // Update current date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = today.toLocaleDateString('en-US', options);
+
+            // Calculate week of the year
+            const startOfYear = new Date(today.getFullYear(), 0, 1);
+            const daysSinceStart = Math.floor((today - startOfYear) / (1000 * 60 * 60 * 24));
+            const weekNumber = Math.ceil((daysSinceStart + startOfYear.getDay() + 1) / 7);
+            document.getElementById('week-number').textContent = weekNumber;
+
+            // Update week progress
+            const weekProgress = Math.min(((daysSinceStart % 7) / 7) * 100, 100).toFixed(2);
+            document.getElementById('week-progress').textContent = weekProgress;
+            document.getElementById('week-bar').style.width = weekProgress + '%';
+
+            // Update year progress
+            const daysInYear = (today.getFullYear() % 4 === 0 && (today.getFullYear() % 100 !== 0 || today.getFullYear() % 400 === 0)) ? 366 : 365;
+            const yearProgress = ((daysSinceStart / daysInYear) * 100).toFixed(2);
+            document.getElementById('year-progress').textContent = yearProgress;
+            document.getElementById('year-bar').style.width = yearProgress + '%';
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>
