@@ -98,7 +98,7 @@
             <span>Q4</span>
         </div>
 
-        <div class="footer">"Let's build"</div>
+        <div class="footer">"Let's Build"</div>
     </div>
 
     <script>
@@ -111,20 +111,20 @@
 
             // Calculate week of the year
             const startOfYear = new Date(today.getFullYear(), 0, 1);
-            const daysSinceStart = Math.floor((today - startOfYear) / (1000 * 60 * 60 * 24));
-            const weekNumber = Math.ceil((daysSinceStart + startOfYear.getDay() + 1) / 7);
+            const dayOfYear = Math.floor((today - startOfYear + (startOfYear.getTimezoneOffset() - today.getTimezoneOffset()) * 60000) / (1000 * 60 * 60 * 24)) + 1;
+            const weekNumber = Math.ceil(dayOfYear / 7);
             document.getElementById('week-number').textContent = weekNumber;
 
             // Update week progress
-            const weekProgress = Math.min(((daysSinceStart % 7) / 7) * 100, 100).toFixed(2);
-            document.getElementById('week-progress').textContent = weekProgress;
+            const weekProgress = ((dayOfYear % 7) / 7) * 100;
+            document.getElementById('week-progress').textContent = weekProgress.toFixed(2);
             document.getElementById('week-bar').style.width = weekProgress + '%';
 
             // Update year progress
             const daysInYear = (today.getFullYear() % 4 === 0 && (today.getFullYear() % 100 !== 0 || today.getFullYear() % 400 === 0)) ? 366 : 365;
-            const yearProgress = ((daysSinceStart / daysInYear) * 100).toFixed(2);
-            document.getElementById('year-progress').textContent = yearProgress;
-            document.getElementById('year-bar').style.width = yearProgress + '%';
+            const yearProgress = (dayOfYear / daysInYear) * 100;
+            document.getElementById('year-progress').textContent = yearProgress.toFixed(2);
+            document.getElementById('year-bar').style.width = yearProgress.toFixed(2) + '%';
         }
 
         updateProgress();
